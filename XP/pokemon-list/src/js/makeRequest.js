@@ -6,7 +6,7 @@ export default class MakeRequest {
 
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4 && xhr.status === 200) {
-                var dataResponse = xhr.responseText;
+                var dataResponse = JSON.parse(xhr.responseText);
                 callback(dataResponse);
             }
         }
