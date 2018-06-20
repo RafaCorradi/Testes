@@ -2,37 +2,32 @@ import React, { Component } from 'react';
 import logo from '../images/logo.svg';
 import '../css/App.css';
 import MakeRequest from './MakeRequest';
-import ExtractData from './ExtractData';
+import ListContainer from './ListContainer';
 
 const makeRequest = new MakeRequest();
-const extractData = new ExtractData();
-const pokemonData = {};
 let limitList = 'limit=25';
-let offset = 'offset=25';
+let offset = 'offset=0';
 const urlToRequest = 'https://pokeapi.co/api/v2/pokemon/?' + limitList + '&' + offset;
 
-function initialCallback (data) {
-    let pokemonIndex = 0;
-
-    if (data.previous != null) {
-        pokemonData.previousLink = data.previous;
-    }
-
-    if (data.next != null) {
-        pokemonData.nextLink = data.next;
-    }
-
-    for (let i = 0; i < data.results.length; i++) {
-        let pokemonUrl = data.results[i].url;
-        makeRequest.createRequest(pokemonUrl, extractData.extractPokemonData, pokemonData, pokemonIndex);
-
-        pokemonIndex++;
-    }
+function initialCallback (data, instance) {
+    instance.setState ({
+        pokemonData: data,
+    })
 }
 
-makeRequest.createRequest(urlToRequest, initialCallback);
-
 class App extends Component {
+    constructor() {
+        super();
+        this.state = {
+            pokemonData: {},
+        }
+    }
+
+    componentDidMount () {
+        var __self = this;
+        makeRequest.createRequest(urlToRequest, initialCallback, __self);
+    }
+
     render() {
         return (
             <div className="App">
@@ -40,9 +35,9 @@ class App extends Component {
                     <img src={logo} className="App-logo" alt="logo" />
                     <h1 className="App-title">Welcome to React</h1>
                 </header>
-                <p className="App-intro">
-                    To get started, edit <code>src/App.js</code> and save to reload.
-                </p>
+                <div>
+                    <ListContainer pokemonData = { this.state.pokemonData } />
+                </div>
             </div>
         );
     }
