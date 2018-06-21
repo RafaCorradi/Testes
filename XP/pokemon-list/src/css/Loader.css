@@ -1,0 +1,46 @@
+.loaderContainer {
+    background-color: rgba(255,255,255,0.7);
+    border-radius: 50px;
+    height: 300px;
+    left: 50%;
+    position: fixed;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    width: 300px;
+    z-index: 999;
+}
+
+.loaderContainer h2 {
+    margin: 0;
+}
+
+.loader {
+    height: 300px;
+    position: relative;
+    width: 300px;
+}
+
+.reactLogo {
+    animation: App-logo-spin infinite 20s linear;
+    left: 105px;
+    position: absolute;
+    top: 100px;
+    width: 90px;
+}
+
+.pikachuFace {
+    width: 250px;
+}
+
+#notShow {
+    display: none;
+}
+
+@keyframes App-logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

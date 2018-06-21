@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import '../css/UpdateList.css';
 
 class UpdateList extends Component {
     handleClick (event) {

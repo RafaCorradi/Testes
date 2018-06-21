@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import '../css/ListContainer.css';
 import Card from './Card';
+import Loader from './Loader';
 import UpdateList from './UpdateList';
 import MakeRequest from './MakeRequest';
 
@@ -10,6 +12,7 @@ class ListContainer extends Component {
         super(props);
         this.state = {
             pokemonData: [],
+            loaderVisibility: 'notShow',
         }
     }    
 
@@ -19,6 +22,8 @@ class ListContainer extends Component {
         if (!url) {
             return;
         }
+
+        __self.setState({loaderVisibility: 'show'});
 
         makeRequest.createPromisseRequest(url).then( xhr => {
             let { results, previous, next } = JSON.parse(xhr.response);
@@ -31,21 +36,26 @@ class ListContainer extends Component {
 
             Promise.all(newPokemonsList)
                 .then(pokemonRequests => pokemonRequests.map(pokemonRequest => JSON.parse(pokemonRequest.response)))
-                .then(pokemons => __self.setState({ pokemonData: pokemons}));
+                .then(pokemons => __self.setState({ pokemonData: pokemons, loaderVisibility: 'notShow' }));
         });
     }
 
     render () {
         if (this.state.pokemonData.length === 0) {
-            return null
+            return (
+                <Loader />
+            )
         }
 
         return (
-            <ul className="listContainer">
-                { this.state.pokemonData.map((pokemon, index) => <Card key={index} pokemon={pokemon}/>) }
-                <UpdateList className='previousButton' updateList={this.updateList.bind(this)} link={this.state.previousLink} buttonDescription='Voltar' />
-                <UpdateList className='nextButton' updateList={this.updateList.bind(this)} link={this.state.nextLink} buttonDescription='Próximo' />
-            </ul>
+            <div>
+                <Loader loaderVisibility={this.state.loaderVisibility}/>
+                <ul className="listContainer">
+                    { this.state.pokemonData.map((pokemon, index) => <Card key={index} pokemon={pokemon}/>) }
+                </ul>
+                <UpdateList className='previousButton' updateList={this.updateList.bind(this)} link={this.state.previousLink} buttonDescription='Prev' />
+                <UpdateList className='nextButton' updateList={this.updateList.bind(this)} link={this.state.nextLink} buttonDescription='Next' />
+            </div>
         );
     }
 
