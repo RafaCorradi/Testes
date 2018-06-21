@@ -20,3 +20,9 @@
 .App-intro {
     font-size: large;
 }
+
+@media (min-width: 300px) and (max-width: 461px) {
+    .App-header{
+        height: 170px;
+    }
+}
