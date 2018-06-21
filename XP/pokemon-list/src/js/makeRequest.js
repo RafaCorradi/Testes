@@ -1,14 +1,19 @@
 export default class MakeRequest {
-    createRequest (apiUrl, callback, instance) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", apiUrl, true);
-        xhr.send();
+    createPromisseRequest (url) {
+        return new Promise (
+            function (resolve, reject) {
+                let xhr = new XMLHttpRequest();
+                xhr.open('GET', url);
+                xhr.addEventListener('readystatechange', function () {
+                    if (xhr.readyState !== 4) {
+                        return;
+                    }
 
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                var dataResponse = JSON.parse(xhr.responseText);
-                callback(dataResponse, instance);    
+                    resolve(xhr);
+                });
+
+                xhr.send();
             }
-        }
+        )
     }
 }

@@ -9,12 +9,6 @@ let limitList = 'limit=25';
 let offset = 'offset=0';
 const urlToRequest = 'https://pokeapi.co/api/v2/pokemon/?' + limitList + '&' + offset;
 
-function initialCallback (data, instance) {
-    instance.setState ({
-        pokemonData: data,
-    })
-}
-
 class App extends Component {
     constructor() {
         super();
@@ -25,7 +19,11 @@ class App extends Component {
 
     componentDidMount () {
         var __self = this;
-        makeRequest.createRequest(urlToRequest, initialCallback, __self);
+        makeRequest.createPromisseRequest(urlToRequest).then(function (xhr) {
+            __self.setState ({
+                pokemonData: JSON.parse(xhr.response)
+            })
+        });
     }
 
     render() {
